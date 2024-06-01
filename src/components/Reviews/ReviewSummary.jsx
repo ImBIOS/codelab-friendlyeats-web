@@ -1,6 +1,6 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
 import { getReviewsByRestaurantId } from "@/src/lib/firebase/firestore.js";
 import { getAuthenticatedAppForUser } from "@/src/lib/firebase/serverApp";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getFirestore } from "firebase/firestore";
 
 export async function GeminiSummary({ restaurantId }) {

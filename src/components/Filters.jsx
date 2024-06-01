@@ -9,8 +9,8 @@ function FilterSelect({ label, options, value, onChange, name, icon }) {
 			<label>
 				{label}
 				<select value={value} onChange={onChange} name={name}>
-					{options.map((option, index) => (
-						<option value={option} key={index}>
+					{options.map((option) => (
+						<option value={option} key={option}>
 							{option === "" ? "All" : option}
 						</option>
 					))}
@@ -22,7 +22,7 @@ function FilterSelect({ label, options, value, onChange, name, icon }) {
 
 export default function Filters({ filters, setFilters }) {
 	const handleSelectionChange = (event, name) => {
-		setFilters(prevFilters => ({
+		setFilters((prevFilters) => ({
 			...prevFilters,
 			[name]: event.target.value,
 		}));
@@ -45,7 +45,7 @@ export default function Filters({ filters, setFilters }) {
 
 				<form
 					method="GET"
-					onSubmit={event => {
+					onSubmit={(event) => {
 						event.preventDefault();
 						event.target.parentNode.removeAttribute("open");
 					}}
@@ -69,9 +69,7 @@ export default function Filters({ filters, setFilters }) {
 							"Tapas",
 						]}
 						value={filters.category}
-						onChange={event =>
-							handleSelectionChange(event, "category")
-						}
+						onChange={(event) => handleSelectionChange(event, "category")}
 						name="category"
 						icon="/food.svg"
 					/>
@@ -93,7 +91,7 @@ export default function Filters({ filters, setFilters }) {
 							"Istanbul",
 						]}
 						value={filters.city}
-						onChange={event => handleSelectionChange(event, "city")}
+						onChange={(event) => handleSelectionChange(event, "city")}
 						name="city"
 						icon="/location.svg"
 					/>
@@ -102,9 +100,7 @@ export default function Filters({ filters, setFilters }) {
 						label="Price"
 						options={["", "$", "$$", "$$$", "$$$$"]}
 						value={filters.price}
-						onChange={event =>
-							handleSelectionChange(event, "price")
-						}
+						onChange={(event) => handleSelectionChange(event, "price")}
 						name="price"
 						icon="/price.svg"
 					/>
@@ -113,7 +109,7 @@ export default function Filters({ filters, setFilters }) {
 						label="Sort"
 						options={["Rating", "Review"]}
 						value={filters.sort}
-						onChange={event => handleSelectionChange(event, "sort")}
+						onChange={(event) => handleSelectionChange(event, "sort")}
 						name="sort"
 						icon="/sortBy.svg"
 					/>
@@ -147,7 +143,7 @@ export default function Filters({ filters, setFilters }) {
 					// The main filter bar already specifies what
 					// sorting is being used. So skip showing the
 					// sorting as a 'tag'
-					if (type == "sort" || value == "") {
+					if (type === "sort" || value === "") {
 						return null;
 					}
 					return (

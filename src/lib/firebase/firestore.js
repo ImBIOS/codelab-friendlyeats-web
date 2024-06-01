@@ -153,7 +153,18 @@ export async function getRestaurantById(db, restaurantId) {
 }
 
 export function getRestaurantSnapshotById(restaurantId, cb) {
-	return;
+	if (!restaurantId) {
+		console.log("Error: Invalid ID received: ", restaurantId);
+		return;
+	}
+	const docRef = doc(db, "restaurants", restaurantId);
+	const unsubscribe = onSnapshot(docRef, (docSnap) => {
+		cb({
+			...docSnap.data(),
+			timestamp: docSnap.data().timestamp.toDate(),
+		});
+	});
+	return unsubscribe;
 }
 
 export async function getReviewsByRestaurantId(db, restaurantId) {

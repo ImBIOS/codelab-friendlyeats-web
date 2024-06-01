@@ -92,15 +92,15 @@ export default function Header({ initialUser }) {
 								<li>{user.displayName}</li>
 
 								<li>
-									<a href="#" onClick={addFakeRestaurantsAndReviews}>
+									<button type="button" onClick={addFakeRestaurantsAndReviews}>
 										Add sample restaurants
-									</a>
+									</button>
 								</li>
 
 								<li>
-									<a href="#" onClick={handleSignOut}>
+									<button type="button" onClick={handleSignOut}>
 										Sign Out
-									</a>
+									</button>
 								</li>
 							</ul>
 						</div>
@@ -108,10 +108,10 @@ export default function Header({ initialUser }) {
 				</>
 			) : (
 				<div className="profile">
-					<a href="#" onClick={handleSignIn}>
-						<img src="/profile.svg" alt="A placeholder user image" />
+					<button type="button" onClick={handleSignIn}>
+						<img src="/profile.svg" alt="A placeholder user portrait" />
 						Sign In with Google
-					</a>
+					</button>
 				</div>
 			)}
 		</header>
