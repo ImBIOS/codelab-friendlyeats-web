@@ -3,12 +3,12 @@
 // This components handles the restaurant listings page
 // It receives data from src/app/page.jsx, such as the initial restaurants and search params from the URL
 
-import Link from "next/link";
-import { React, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import Filters from "@/src/components/Filters.jsx";
 import renderStars from "@/src/components/Stars.jsx";
 import { getRestaurantsSnapshot } from "@/src/lib/firebase/firestore.js";
-import Filters from "@/src/components/Filters.jsx";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { React, useEffect, useState } from "react";
 
 const RestaurantItem = ({ restaurant }) => (
 	<li key={restaurant.id}>
@@ -72,12 +72,13 @@ export default function RestaurantListings({
 	const [restaurants, setRestaurants] = useState(initialRestaurants);
 	const [filters, setFilters] = useState(initialFilters);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		routerWithFilters(router, filters);
 	}, [filters]);
 
 	useEffect(() => {
-		const unsubscribe = getRestaurantsSnapshot(data => {
+		const unsubscribe = getRestaurantsSnapshot((data) => {
 			setRestaurants(data);
 		}, filters);
 
@@ -90,11 +91,8 @@ export default function RestaurantListings({
 		<article>
 			<Filters filters={filters} setFilters={setFilters} />
 			<ul className="restaurants">
-				{restaurants.map(restaurant => (
-					<RestaurantItem
-						key={restaurant.id}
-						restaurant={restaurant}
-					/>
+				{restaurants.map((restaurant) => (
+					<RestaurantItem key={restaurant.id} restaurant={restaurant} />
 				))}
 			</ul>
 		</article>
