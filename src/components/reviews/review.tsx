@@ -1,8 +1,8 @@
 import renderStars from "@/src/components/stars";
-import type { Schema } from "@/src/lib/firebase/db";
+import type { Schema } from "@/src/lib/firebase/firestore/schema";
 
 export type ReviewProps = {
-	data: Schema["restaurants"]["sub"]["ratings"]["Doc"]["data"];
+	data: Schema["restaurants"]["sub"]["ratings"]["Data"];
 };
 
 export function Review({ data }: ReviewProps) {

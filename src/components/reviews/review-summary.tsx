@@ -1,7 +1,12 @@
 import { env } from "@/src/env";
-import type { Schema } from "@/src/lib/firebase/db";
 import { getReviewsByRestaurantId } from "@/src/lib/firebase/firestore";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import type { Schema } from "@/src/lib/firebase/firestore/schema";
+import {
+	GoogleGenerativeAI,
+	HarmBlockThreshold,
+	HarmCategory,
+	type SafetySetting,
+} from "@google/generative-ai";
 
 type Props = {
 	restaurantId: Schema["restaurants"]["Id"];
@@ -14,8 +19,33 @@ export async function GeminiSummary({ restaurantId }: Props) {
 		restaurantId,
 	);
 
+	const safetySettings: SafetySetting[] = [
+		{
+			category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+			threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+		},
+		{
+			category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+			threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+		},
+		{
+			category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+			threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+		},
+		{
+			category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+			threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+		},
+		// {
+		// 	category: HarmCategory.HARM_CATEGORY_UNSPECIFIED,
+		// 	threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+		// },
+	];
 	const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
-	const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+	const model = genAI.getGenerativeModel({
+		model: "gemini-pro",
+		safetySettings,
+	});
 
 	const reviewSeparator = "@";
 	const prompt = `
@@ -24,7 +54,7 @@ export async function GeminiSummary({ restaurantId }: Props) {
       create a one-sentence summary of what people think of the restaurant.
 
       Here are the reviews: ${reviews
-				?.map((review) => review.data.text)
+				?.map((review) => review.text)
 				.join(reviewSeparator)}
   `;
 

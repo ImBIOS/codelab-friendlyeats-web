@@ -11,6 +11,7 @@ export const env = createEnv({
 			.enum(["development", "test", "production"])
 			.default("development"),
 		GEMINI_API_KEY: z.string(),
+		GOOGLE_APPLICATION_CREDENTIALS: z.string(),
 	},
 
 	/**
@@ -32,6 +33,8 @@ export const env = createEnv({
 	 * middlewares) or client-side so we need to destruct manually.
 	 */
 	runtimeEnv: {
+		NODE_ENV: process.env.NODE_ENV,
+
 		NEXT_PUBLIC_FIREBASE_API_KEY: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
 		NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN:
 			process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -42,6 +45,7 @@ export const env = createEnv({
 		NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID:
 			process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
 		NEXT_PUBLIC_FIREBASE_APP_ID: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+		GOOGLE_APPLICATION_CREDENTIALS: process.env.GOOGLE_APPLICATION_CREDENTIALS,
 
 		GEMINI_API_KEY: process.env.GEMINI_API_KEY,
 	},

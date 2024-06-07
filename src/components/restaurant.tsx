@@ -3,28 +3,19 @@
 // This components shows one individual restaurant
 // It receives data from src/app/restaurant/[id]/page.jsx
 
-import RestaurantDetails, {
-	type RestaurantDetail,
-} from "@/src/components/restaurant-details.jsx";
+import RestaurantDetails from "@/src/components/restaurant-details";
 import { getRestaurantSnapshotById } from "@/src/lib/firebase/firestore";
 import { updateRestaurantImage } from "@/src/lib/firebase/storage";
 import { useUser } from "@/src/lib/hooks/use-user";
 import dynamic from "next/dynamic";
-import {
-	Suspense,
-	useEffect,
-	useState,
-	type ChangeEvent,
-	type SetStateAction,
-} from "react";
+import { Suspense, useEffect, useState, type ChangeEvent } from "react";
+import type { Schema } from "../lib/firebase/firestore/schema";
 
-const ReviewDialog = dynamic(
-	() => import("@/src/components/review-dialog.jsx"),
-);
+const ReviewDialog = dynamic(() => import("@/src/components/review-dialog"));
 
 type Props = {
-	id: string;
-	initialRestaurant: RestaurantDetail;
+	id: Schema["restaurants"]["Id"];
+	initialRestaurant: Schema["restaurants"]["Data"] | undefined;
 	initialUserId: string;
 	children: React.ReactNode;
 };
@@ -35,8 +26,9 @@ export default function Restaurant({
 	initialUserId,
 	children,
 }: Props) {
-	const [restaurantDetail, setRestaurantDetail] =
-		useState<RestaurantDetail>(initialRestaurant);
+	const [restaurantDetail, setRestaurantDetail] = useState<
+		Schema["restaurants"]["Data"] | undefined
+	>(initialRestaurant);
 	const [isOpen, setIsOpen] = useState(false);
 
 	// The only reason this component needs to know the user ID is to associate a review with the user, and to know whether to show the review dialog
@@ -57,7 +49,8 @@ export default function Restaurant({
 		}
 
 		const imageURL = (await updateRestaurantImage(id, image)) ?? "";
-		setRestaurantDetail({ ...restaurantDetail, photo: imageURL });
+		if (restaurantDetail)
+			setRestaurantDetail({ ...restaurantDetail, photo: imageURL });
 	}
 
 	const handleClose = () => {
@@ -69,7 +62,7 @@ export default function Restaurant({
 	useEffect(() => {
 		const unsubscribeFromRestaurant = getRestaurantSnapshotById(
 			id,
-			(data: SetStateAction<RestaurantDetail>) => {
+			(data: Schema["restaurants"]["Data"] | undefined) => {
 				setRestaurantDetail(data);
 			},
 		);

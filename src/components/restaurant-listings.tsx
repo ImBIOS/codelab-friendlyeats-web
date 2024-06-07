@@ -3,14 +3,21 @@
 // This components handles the restaurant listings page
 // It receives data from src/app/page.jsx, such as the initial restaurants and search params from the URL
 
-import Filters from "@/src/components/filters.jsx";
-import renderStars from "@/src/components/stars.jsx";
-import { getRestaurantsSnapshot } from "@/src/lib/firebase/firestore";
+import Filters from "@/src/components/filters";
+import renderStars from "@/src/components/stars";
+import {
+	getRestaurantsSnapshot,
+	type RestaurantDataWithId,
+} from "@/src/lib/firebase/firestore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import type { SearchParams } from "../global.type";
+import type { Schema } from "../lib/firebase/firestore/schema";
 
-const RestaurantItem = ({ restaurant }) => (
+const RestaurantItem = ({
+	restaurant,
+}: { restaurant: RestaurantDataWithId }) => (
 	<li key={restaurant.id}>
 		<Link href={`/restaurant/${restaurant.id}`}>
 			<ActiveResturant restaurant={restaurant} />
@@ -18,20 +25,24 @@ const RestaurantItem = ({ restaurant }) => (
 	</li>
 );
 
-const ActiveResturant = ({ restaurant }) => (
+const ActiveResturant = ({
+	restaurant,
+}: { restaurant: Schema["restaurants"]["Data"] }) => (
 	<div>
 		<ImageCover photo={restaurant.photo} name={restaurant.name} />
 		<ResturantDetails restaurant={restaurant} />
 	</div>
 );
 
-const ImageCover = ({ photo, name }) => (
+const ImageCover = ({ photo, name }: { photo: string; name: string }) => (
 	<div className="image-cover">
 		<img src={photo} alt={name} />
 	</div>
 );
 
-const ResturantDetails = ({ restaurant }) => (
+const ResturantDetails = ({
+	restaurant,
+}: { restaurant: Schema["restaurants"]["Data"] }) => (
 	<div className="restaurant__details">
 		<h2>{restaurant.name}</h2>
 		<RestaurantRating restaurant={restaurant} />
@@ -39,14 +50,18 @@ const ResturantDetails = ({ restaurant }) => (
 	</div>
 );
 
-const RestaurantRating = ({ restaurant }) => (
+const RestaurantRating = ({
+	restaurant,
+}: { restaurant: Schema["restaurants"]["Data"] }) => (
 	<div className="restaurant__rating">
 		<ul>{renderStars(restaurant.avgRating)}</ul>
 		<span>({restaurant.numRatings})</span>
 	</div>
 );
 
-const RestaurantMetadata = ({ restaurant }) => (
+const RestaurantMetadata = ({
+	restaurant,
+}: { restaurant: Schema["restaurants"]["Data"] }) => (
 	<div className="restaurant__meta">
 		<p>
 			{restaurant.category} | {restaurant.city}
@@ -58,15 +73,18 @@ const RestaurantMetadata = ({ restaurant }) => (
 export default function RestaurantListings({
 	initialRestaurants,
 	searchParams,
+}: {
+	initialRestaurants: RestaurantDataWithId[];
+	searchParams: SearchParams;
 }) {
 	const router = useRouter();
 
 	// The initial filters are the search params from the URL, useful for when the user refreshes the page
 	const initialFilters = {
-		city: searchParams.city || "",
-		category: searchParams.category || "",
-		price: searchParams.price || "",
-		sort: searchParams.sort || "",
+		city: (searchParams.city as string) || "",
+		category: (searchParams.category as string) || "",
+		price: (searchParams.price as string) || "",
+		sort: (searchParams.sort as string) || "",
 	};
 
 	const [restaurants, setRestaurants] = useState(initialRestaurants);
@@ -83,7 +101,7 @@ export default function RestaurantListings({
 		}, filters);
 
 		return () => {
-			unsubscribe();
+			unsubscribe?.();
 		};
 	}, [filters]);
 
@@ -99,11 +117,20 @@ export default function RestaurantListings({
 	);
 }
 
-function routerWithFilters(router, filters) {
+function routerWithFilters(
+	router: string[] | ReturnType<typeof useRouter>,
+	filters:
+		| {
+				[s: string]: // This components handles the restaurant listings page
+				// It receives data from src/app/page.jsx, such as the initial restaurants and search params from the URL
+				unknown;
+		  }
+		| ArrayLike<unknown>,
+) {
 	const queryParams = new URLSearchParams();
 
 	for (const [key, value] of Object.entries(filters)) {
-		if (value !== undefined && value !== "") {
+		if (typeof value === "string" && value !== "") {
 			queryParams.append(key, value);
 		}
 	}

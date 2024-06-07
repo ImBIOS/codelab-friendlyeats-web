@@ -1,7 +1,7 @@
 "use client";
 
 import { Review, type ReviewProps } from "@/src/components/reviews/review";
-import type { Schema } from "@/src/lib/firebase/db";
+import type { Schema } from "@/src/lib/firebase/firestore/schema";
 import { getReviewsSnapshotByRestaurantId } from "@/src/lib/firebase/firestore";
 import { useEffect, useState, type SetStateAction } from "react";
 

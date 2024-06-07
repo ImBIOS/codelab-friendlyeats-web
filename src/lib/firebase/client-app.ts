@@ -5,6 +5,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { firebaseConfig } from "./config";
+
 export const firebaseApp =
 	getApps().length === 0
 		? initializeApp(firebaseConfig)

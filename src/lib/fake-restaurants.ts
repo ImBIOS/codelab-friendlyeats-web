@@ -23,13 +23,12 @@ export async function generateFakeRestaurantsAndReviews() {
 			);
 
 			const ratingData = {
-				rating:
-					randomData.restaurantReviews[
-						randomNumberBetween(0, randomData.restaurantReviews.length - 1)
-					]?.rating,
+				rating: randomData.restaurantReviews[
+					randomNumberBetween(0, randomData.restaurantReviews.length - 1)
+				]?.rating as number,
 				text: randomData.restaurantReviews[
 					randomNumberBetween(0, randomData.restaurantReviews.length - 1)
-				]?.text,
+				]?.text as string,
 				userId: `User #${randomNumberBetween()}`,
 				timestamp: ratingTimestamp,
 			};
@@ -46,17 +45,16 @@ export async function generateFakeRestaurantsAndReviews() {
 			: 0;
 
 		const restaurantData = {
-			category:
-				randomData.restaurantCategories[
-					randomNumberBetween(0, randomData.restaurantCategories.length - 1)
-				],
+			category: randomData.restaurantCategories[
+				randomNumberBetween(0, randomData.restaurantCategories.length - 1)
+			] as string,
 			name: randomData.restaurantNames[
 				randomNumberBetween(0, randomData.restaurantNames.length - 1)
-			],
+			] as string,
 			avgRating,
 			city: randomData.restaurantCities[
 				randomNumberBetween(0, randomData.restaurantCities.length - 1)
-			],
+			] as string,
 			numRatings: ratingsData.length,
 			sumRating: ratingsData.reduce(
 				(accumulator, currentValue) => accumulator + (currentValue.rating ?? 0),

@@ -3,8 +3,12 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "@/src/lib/firebase/client-app";
 
 import { updateRestaurantImageReference } from "@/src/lib/firebase/firestore";
+import type { Schema } from "./firestore/schema";
 
-export async function updateRestaurantImage(restaurantId, image) {
+export async function updateRestaurantImage(
+	restaurantId: Schema["restaurants"]["Id"],
+	image: File,
+) {
 	try {
 		if (!restaurantId) throw new Error("No restaurant ID has been provided.");
 
@@ -20,7 +24,10 @@ export async function updateRestaurantImage(restaurantId, image) {
 	}
 }
 
-async function uploadImage(restaurantId, image) {
+async function uploadImage(
+	restaurantId: Schema["restaurants"]["Id"],
+	image: File,
+) {
 	const filePath = `images/${restaurantId}/${image.name}`;
 	const newImageRef = ref(storage, filePath);
 	await uploadBytesResumable(newImageRef, image);

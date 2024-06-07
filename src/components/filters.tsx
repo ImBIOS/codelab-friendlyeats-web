@@ -1,8 +1,25 @@
 // The filters shown on the restaurant listings page
 
-import Tag from "@/src/components/tag.jsx";
+import Tag from "@/src/components/tag";
+import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 
-function FilterSelect({ label, options, value, onChange, name, icon }) {
+type FilterSelectProps = {
+	label: string;
+	options: string[];
+	value: string;
+	onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
+	name: string;
+	icon: string;
+};
+
+function FilterSelect({
+	label,
+	options,
+	value,
+	onChange,
+	name,
+	icon,
+}: FilterSelectProps) {
 	return (
 		<div>
 			<img src={icon} alt={label} />
@@ -20,15 +37,35 @@ function FilterSelect({ label, options, value, onChange, name, icon }) {
 	);
 }
 
-export default function Filters({ filters, setFilters }) {
-	const handleSelectionChange = (event, name) => {
+type FiltersProps = {
+	filters: {
+		city: string;
+		category: string;
+		price: string;
+		sort: string;
+	};
+	setFilters: Dispatch<
+		SetStateAction<{
+			city: string;
+			category: string;
+			price: string;
+			sort: string;
+		}>
+	>;
+};
+
+export default function Filters({ filters, setFilters }: FiltersProps) {
+	const handleSelectionChange = (
+		event: ChangeEvent<HTMLSelectElement>,
+		name: string,
+	) => {
 		setFilters((prevFilters) => ({
 			...prevFilters,
 			[name]: event.target.value,
 		}));
 	};
 
-	const updateField = (type, value) => {
+	const updateField = (type: string, value: string) => {
 		setFilters({ ...filters, [type]: value });
 	};
 
@@ -47,7 +84,9 @@ export default function Filters({ filters, setFilters }) {
 					method="GET"
 					onSubmit={(event) => {
 						event.preventDefault();
-						event.target.parentNode.removeAttribute("open");
+						const target = event.target as Element;
+						const parent = target.parentNode as Element;
+						parent?.removeAttribute("open");
 					}}
 				>
 					<FilterSelect

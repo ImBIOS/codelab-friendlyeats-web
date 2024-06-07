@@ -1,6 +1,8 @@
 import "@/src/app/styles.css";
-import Header from "@/src/components/header.jsx";
+import Header from "@/src/components/header";
+import "@/src/lib/firebase/firestore/init";
 import { getAuthenticatedAppForUser } from "@/src/lib/firebase/server-app";
+
 // Force next.js to treat this route as server-side rendered
 // Without this line, during the build process, next.js will treat this route as static and build a static HTML file for it
 export const dynamic = "force-dynamic";
