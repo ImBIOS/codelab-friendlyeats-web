@@ -5,7 +5,7 @@ import { getRestaurants } from "../lib/firebase/firestore";
 // Force next.js to treat this route as server-side rendered
 // Without this line, during the build process, next.js will treat this route as static and build a static HTML file for it
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 type Props = {
 	searchParams: SearchParams;
