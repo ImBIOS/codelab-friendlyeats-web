@@ -1,6 +1,7 @@
 import { generateFakeRestaurantsAndReviews } from "@/src/lib/fake-restaurants";
 
 import type { ReviewProps } from "@/src/components/reviews/review";
+import { revalidateTag, unstable_cache } from "next/cache";
 import type { SetStateAction } from "react";
 import { transaction } from "typesaurus";
 import { db as newDb, type Schema } from "./schema";
@@ -112,13 +113,22 @@ export function getRestaurantSnapshotById(
 	return unsubscribe;
 }
 
-export async function getRestaurants(filters = {}) {
+const getRestaurantsImpl = async (filters = {}) => {
 	const results = await applyQueryFilters(filters).run();
 	return results.map((restaurant) => ({
 		id: restaurant.ref.id,
 		...restaurant.data,
 	}));
-}
+};
+
+export const getRestaurants = unstable_cache(
+	getRestaurantsImpl,
+	["getRestaurants"],
+	{
+		tags: ["getRestaurants"],
+		revalidate: 86_400,
+	},
+);
 
 export async function getReviewsByRestaurantId(
 	restaurantId: Schema["restaurants"]["Id"],
@@ -175,6 +185,7 @@ export async function addFakeRestaurantsAndReviews() {
 					timestamp: $.serverDate(),
 				}));
 			}
+			revalidateTag("getRestaurants");
 		} catch (e) {
 			console.log("There was an error adding the document");
 			console.error("Error adding document: ", e);
