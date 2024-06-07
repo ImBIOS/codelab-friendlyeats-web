@@ -22,7 +22,8 @@
 		"next": "^14.2.3",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
-		"server-only": "^0.0.1"
+		"server-only": "^0.0.1",
+		"typesaurus": "^10.7.0"
 	},
 	"browser": {
 		"fs": false,
