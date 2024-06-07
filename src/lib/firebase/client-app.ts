@@ -11,8 +11,19 @@ export const firebaseApp =
 		? initializeApp(firebaseConfig)
 		: (getApps()[0] as FirebaseApp);
 export const auth = getAuth(firebaseApp);
-connectAuthEmulator(auth, "http://localhost:9099");
 export const db = getFirestore(firebaseApp);
-connectFirestoreEmulator(db, "localhost", 8080);
 export const storage = getStorage(firebaseApp);
-connectStorageEmulator(storage, "localhost", 9199);
+
+fetch("http://localhost:4000").then(
+	() => {
+		console.log("\x1b[42m%s\x1b[0m", "Emulator is available, connecting to it");
+
+		connectAuthEmulator(auth, "http://localhost:9099");
+		connectFirestoreEmulator(db, "localhost", 8080);
+		connectStorageEmulator(storage, "localhost", 9199);
+	},
+	() => {
+		// Emulator is not available
+		console.log("\x1b[41m%s\x1b[0m", "Running firebase without emulator");
+	},
+);
