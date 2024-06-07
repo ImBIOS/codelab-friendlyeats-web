@@ -11,7 +11,7 @@ export const env = createEnv({
 			.enum(["development", "test", "production"])
 			.default("development"),
 		GEMINI_API_KEY: z.string(),
-		GOOGLE_APPLICATION_CREDENTIALS: z.string(),
+		GOOGLE_APPLICATION_CREDENTIALS_JSON: z.string(),
 	},
 
 	/**
@@ -45,7 +45,8 @@ export const env = createEnv({
 		NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID:
 			process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
 		NEXT_PUBLIC_FIREBASE_APP_ID: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-		GOOGLE_APPLICATION_CREDENTIALS: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+		GOOGLE_APPLICATION_CREDENTIALS_JSON:
+			process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON,
 
 		GEMINI_API_KEY: process.env.GEMINI_API_KEY,
 	},

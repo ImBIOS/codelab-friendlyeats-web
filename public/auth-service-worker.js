@@ -1,3 +1,4 @@
+"use strict";
 (() => {
   // node_modules/@firebase/util/dist/index.esm2017.js
   var stringToByteArray$1 = function(str) {
@@ -1832,9 +1833,8 @@
   // node_modules/tslib/tslib.es6.mjs
   function __rest(s, e) {
     var t = {};
-    for (var p in s)
-      if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+      t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
       for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
         if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
@@ -7996,10 +7996,11 @@
   registerVersion(name4, version4);
   registerVersion(name4, version4, "esm2017");
 
-  // auth-service-worker.js
+  // auth-service-worker.ts
+  var auth_service_worker_default = null;
   var firebaseConfig;
-  self.addEventListener("install", (event) => {
-    const serializedFirebaseConfig = new URL(location).searchParams.get(
+  self.addEventListener("install", () => {
+    const serializedFirebaseConfig = new URL(location.href).searchParams.get(
       "firebaseConfig"
     );
     if (!serializedFirebaseConfig) {
@@ -8012,30 +8013,32 @@
   });
   self.addEventListener("fetch", (event) => {
     const { origin } = new URL(event.request.url);
-    if (origin !== self.location.origin)
-      return;
+    if (origin !== self.location.origin) return;
     event.respondWith(fetchWithFirebaseHeaders(event.request));
   });
   async function fetchWithFirebaseHeaders(request) {
     try {
-      const headers = new Headers(request.headers);
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
       const installations = getInstallations(app);
+      const headers = new Headers(request.headers);
       const [authIdToken, installationToken] = await Promise.all([
-        getIdToken(auth),
+        getAuthIdToken(auth),
         getToken(installations)
       ]);
       headers.append("Firebase-Instance-ID-Token", installationToken);
-      if (authIdToken) {
-        headers.append("Authorization", `Bearer ${authIdToken}`);
-      }
+      if (authIdToken) headers.append("Authorization", `Bearer ${authIdToken}`);
       const newRequest = new Request(request, { headers });
       return await fetch(newRequest);
     } catch (e) {
       console.error("Error fetching with Firebase headers", e);
       return await fetch(request);
     }
+  }
+  async function getAuthIdToken(auth) {
+    await auth.authStateReady();
+    if (!auth.currentUser) return;
+    return await getIdToken(auth.currentUser);
   }
 })();
 /*! Bundled license information:
