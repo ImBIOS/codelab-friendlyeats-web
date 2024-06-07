@@ -77,8 +77,6 @@ const ReviewDialog = ({
 				<footer>
 					<menu>
 						<button
-							// biome-ignore lint/a11y/noAutofocus: <explanation>
-							autoFocus
 							type="reset"
 							onClick={handleClose}
 							className="button--cancel"

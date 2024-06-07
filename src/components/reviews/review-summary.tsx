@@ -13,11 +13,7 @@ type Props = {
 };
 
 export async function GeminiSummary({ restaurantId }: Props) {
-	// const { firebaseServerApp } = await getAuthenticatedAppForUser();
-	const reviews = await getReviewsByRestaurantId(
-		// getFirestore(firebaseServerApp),
-		restaurantId,
-	);
+	const reviews = await getReviewsByRestaurantId(restaurantId);
 
 	const safetySettings: SafetySetting[] = [
 		{
@@ -36,10 +32,6 @@ export async function GeminiSummary({ restaurantId }: Props) {
 			category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
 			threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
 		},
-		// {
-		// 	category: HarmCategory.HARM_CATEGORY_UNSPECIFIED,
-		// 	threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-		// },
 	];
 	const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
 	const model = genAI.getGenerativeModel({

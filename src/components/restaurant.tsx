@@ -58,7 +58,6 @@ export default function Restaurant({
 		setReview({ rating: 0, text: "" });
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		const unsubscribeFromRestaurant = getRestaurantSnapshotById(
 			id,
@@ -70,7 +69,7 @@ export default function Restaurant({
 		return () => {
 			if (unsubscribeFromRestaurant) unsubscribeFromRestaurant();
 		};
-	}, []);
+	}, [id]);
 
 	return (
 		<>

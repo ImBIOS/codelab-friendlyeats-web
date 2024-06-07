@@ -90,10 +90,9 @@ export default function RestaurantListings({
 	const [restaurants, setRestaurants] = useState(initialRestaurants);
 	const [filters, setFilters] = useState(initialFilters);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		routerWithFilters(router, filters);
-	}, [filters]);
+	}, [filters, router]);
 
 	useEffect(() => {
 		const unsubscribe = getRestaurantsSnapshot((data) => {

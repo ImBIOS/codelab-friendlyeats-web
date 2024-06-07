@@ -1,7 +1,6 @@
 import { generateFakeRestaurantsAndReviews } from "@/src/lib/fake-restaurants";
 
 import type { ReviewProps } from "@/src/components/reviews/review";
-// import { db } from "@/src/lib/firebase/client-app";
 import type { SetStateAction } from "react";
 import { transaction } from "typesaurus";
 import { db as newDb, type Schema } from "./schema";
@@ -11,64 +10,13 @@ export async function updateRestaurantImageReference(
 	restaurantId: Schema["restaurants"]["Id"],
 	publicImageUrl: string,
 ) {
-	// const restaurantRef = doc(collection(db, "restaurants"), restaurantId);
-	// if (restaurantRef) {
-	// 	await updateDoc(restaurantRef, { photo: publicImageUrl });
-	// }
 	const restaurantRef = newDb.restaurants.ref(restaurantId);
 	if (restaurantRef) {
 		await newDb.restaurants.update(restaurantId, { photo: publicImageUrl });
 	}
 }
 
-// const updateWithRating = async (
-// 	// transaction,
-// 	docRef: string,
-// 	newRatingDocument: string,
-// 	review: Omit<Schema["restaurants"]["sub"]["ratings"]["Data"], "timestamp">,
-// ) => {
-// 	const restaurant = await transaction.get(docRef);
-// 	const data = restaurant.data();
-// 	const newNumRatings = data?.numRatings ? data.numRatings + 1 : 1;
-// 	const newSumRating = (data?.sumRating || 0) + Number(review.rating);
-// 	const newAverage = newSumRating / newNumRatings;
-
-// 	// transaction.update(docRef, {
-// 	// 	numRatings: newNumRatings,
-// 	// 	sumRating: newSumRating,
-// 	// 	avgRating: newAverage,
-// 	// });
-
-// 	// transaction.set(newRatingDocument, {
-// 	// 	...review,
-// 	// 	timestamp: Timestamp.fromDate(new Date()),
-// 	// });
-// 	transaction(newDb)
-// 		.read(($) => $.db.restaurants.get(docRef))
-// 		.write(($) => {
-// 			const restaurant = $.result;
-// 			if (!restaurant) return;
-// 			restaurant.update({
-// 				numRatings: newNumRatings,
-// 				sumRating: newSumRating,
-// 				avgRating: newAverage,
-// 			});
-// 		});
-
-// 	transaction(newDb, { as: "server" })
-// 		.read(($) => $.db.restaurants(docRef).ratings.get(newRatingDocument))
-// 		.write(($) => {
-// 			const rating = $.result;
-// 			if (!rating) return;
-// 			rating.set({
-// 				...review,
-// 				timestamp: Timestamp.fromDate(new Date()),
-// 			});
-// 		});
-// };
-
 export async function addReviewToRestaurant(
-	// db: Firestore,
 	restaurantId: Schema["restaurants"]["Id"],
 	review: Omit<Schema["restaurants"]["sub"]["ratings"]["Data"], "timestamp">,
 ) {
@@ -81,16 +29,6 @@ export async function addReviewToRestaurant(
 	}
 
 	try {
-		// const docRef = doc(collection(db, "restaurants"), restaurantId);
-		// const newRatingDocument = doc(
-		// 	collection(db, `restaurants/${restaurantId}/ratings`),
-		// );
-
-		// // corrected line
-		// await runTransaction(db, (transaction) =>
-		// 	updateWithRating(transaction, docRef, newRatingDocument, review),
-		// );
-
 		// Update the restaurant's rating
 		transaction(newDb)
 			.read(($) => $.db.restaurants.get(restaurantId))
@@ -135,24 +73,6 @@ export function getRestaurantsSnapshot(
 		return;
 	}
 
-	// let q = query(collection(db, "restaurants"));
-	// q = applyQueryFilters(q, filters);
-
-	// const unsubscribe = onSnapshot(q, (querySnapshot) => {
-	// 	const results = querySnapshot.docs.map((doc) => {
-	// 		return {
-	// 			id: doc.id,
-	// 			...doc.data(),
-	// 			// Only plain objects can be passed to Client Components from Server Components
-	// 			timestamp: doc.data().timestamp.toDate(),
-	// 		};
-	// 	});
-
-	// 	cb(results);
-	// });
-
-	// return unsubscribe;
-
 	const unsubscribe = applyQueryFilters(filters)
 		.run()
 		.on((restaurants) => {
@@ -167,20 +87,8 @@ export function getRestaurantsSnapshot(
 }
 
 export async function getRestaurantById(
-	// db: Firestore,
 	restaurantId: Schema["restaurants"]["Id"],
 ) {
-	// if (!restaurantId) {
-	// 	console.log("Error: Invalid ID received: ", restaurantId);
-	// 	return;
-	// }
-	// const docRef = doc(db, "restaurants", restaurantId);
-	// const docSnap = await getDoc(docRef);
-	// return {
-	// 	...docSnap.data(),
-	// 	timestamp: docSnap.data()?.timestamp.toDate(),
-	// };
-
 	if (!restaurantId) {
 		console.error("Error: Invalid ID received: ", restaurantId);
 		return;
@@ -198,37 +106,13 @@ export function getRestaurantSnapshotById(
 		console.log("Error: Invalid ID received: ", restaurantId);
 		return;
 	}
-	// const docRef = doc(db, "restaurants", restaurantId);
-	// const unsubscribe = onSnapshot(docRef, (docSnap) => {
-	// 	cb({
-	// 		...docSnap.data(),
-	// 		timestamp: docSnap.data().timestamp.toDate(),
-	// 	});
-	// });
-	// return unsubscribe;
 	const unsubscribe = newDb.restaurants.get(restaurantId).on((restaurant) => {
 		cb(restaurant?.data);
 	});
 	return unsubscribe;
 }
 
-export async function getRestaurants(
-	// db = db,
-	filters = {},
-) {
-	// let q = query(collection(db, "restaurants"));
-
-	// q = applyQueryFilters(q, filters);
-	// const results = await getDocs(q);
-	// return results.docs.map((doc) => {
-	// 	return {
-	// 		id: doc.id,
-	// 		...doc.data(),
-	// 		// Only plain objects can be passed to Client Components from Server Components
-	// 		timestamp: doc.data().timestamp.toDate(),
-	// 	};
-	// });
-
+export async function getRestaurants(filters = {}) {
 	const results = await applyQueryFilters(filters).run();
 	return results.map((restaurant) => ({
 		id: restaurant.ref.id,
@@ -237,29 +121,8 @@ export async function getRestaurants(
 }
 
 export async function getReviewsByRestaurantId(
-	// db: Firestore,
 	restaurantId: Schema["restaurants"]["Id"],
 ) {
-	// if (!restaurantId) {
-	// 	console.log("Error: Invalid restaurantId received: ", restaurantId);
-	// 	return;
-	// }
-
-	// const q = query(
-	// 	collection(db, "restaurants", restaurantId, "ratings"),
-	// 	orderBy("timestamp", "desc"),
-	// );
-
-	// const results = await getDocs(q);
-	// return results.docs.map((doc) => {
-	// 	return {
-	// 		id: doc.id,
-	// 		...doc.data(),
-	// 		// Only plain objects can be passed to Client Components from Server Components
-	// 		timestamp: doc.data().timestamp.toDate(),
-	// 	};
-	// });
-
 	if (!restaurantId) {
 		console.error("Error: Invalid restaurantId received: ", restaurantId);
 		return;
@@ -276,27 +139,6 @@ export function getReviewsSnapshotByRestaurantId(
 	restaurantId: Schema["restaurants"]["Id"],
 	cb: (data: SetStateAction<ReviewProps["data"][]>) => void,
 ) {
-	// if (!restaurantId) {
-	// 	console.log("Error: Invalid restaurantId received: ", restaurantId);
-	// 	return;
-	// }
-	// const q = query(
-	// 	collection(db, "restaurants", restaurantId, "ratings"),
-	// 	orderBy("timestamp", "desc"),
-	// );
-	// const unsubscribe = onSnapshot(q, (querySnapshot) => {
-	// 	const results = querySnapshot.docs.map((doc) => {
-	// 		return {
-	// 			id: doc.id,
-	// 			...doc.data(),
-	// 			// Only plain objects can be passed to Client Components from Server Components
-	// 			timestamp: doc.data().timestamp.toDate(),
-	// 		};
-	// 	});
-	// 	cb(results);
-	// });
-	// return unsubscribe;
-
 	if (!restaurantId) {
 		console.error("Error: Invalid restaurantId received: ", restaurantId);
 		return;
@@ -323,17 +165,6 @@ export async function addFakeRestaurantsAndReviews() {
 	const data = await generateFakeRestaurantsAndReviews();
 	for (const { restaurantData, ratingsData } of data) {
 		try {
-			// const docRef = await addDoc(
-			// 	collection(db, "restaurants"),
-			// 	restaurantData,
-			// );
-
-			// for (const ratingData of ratingsData) {
-			// 	await addDoc(
-			// 		collection(db, "restaurants", docRef.id, "ratings"),
-			// 		ratingData,
-			// 	);
-			// }
 			const restaurantRef = await newDb.restaurants.add(($) => ({
 				...restaurantData,
 				timestamp: $.serverDate(),

@@ -11,11 +11,7 @@ type Props = {
 };
 
 export default async function ReviewsList({ restaurantId, userId }: Props) {
-	// const { firebaseServerApp } = await getAuthenticatedAppForUser();
-	const reviews = await getReviewsByRestaurantId(
-		// getFirestore(firebaseServerApp),
-		restaurantId,
-	);
+	const reviews = await getReviewsByRestaurantId(restaurantId);
 
 	if (reviews)
 		return (

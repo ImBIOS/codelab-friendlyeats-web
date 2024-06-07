@@ -8,10 +8,7 @@ import ReviewsList, {
 } from "@/src/components/reviews/reviews-list";
 import { getRestaurantById } from "@/src/lib/firebase/firestore";
 import type { Schema } from "@/src/lib/firebase/firestore/schema";
-import {
-	getAuthenticatedAppForUser,
-	getAuthenticatedAppForUser as getUser,
-} from "@/src/lib/firebase/server-app";
+import { getAuthenticatedAppForUser as getUser } from "@/src/lib/firebase/server-app";
 import { Suspense } from "react";
 
 type Props = {
@@ -23,11 +20,7 @@ export default async function Home({ params }: Props) {
 	// parameters via Next.js and download the data
 	// we need for this page
 	const { currentUser } = await getUser();
-	const { firebaseServerApp } = await getAuthenticatedAppForUser();
-	const restaurant = await getRestaurantById(
-		// getFirestore(firebaseServerApp),
-		params.id,
-	);
+	const restaurant = await getRestaurantById(params.id);
 
 	return (
 		<main className="main__restaurant">
