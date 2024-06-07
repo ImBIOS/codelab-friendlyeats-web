@@ -25,5 +25,6 @@ export function applyQueryFilters({
 	} else if (sort === "Review") {
 		$.field("numRatings").order("desc");
 	}
+	$.limit(10);
 	return $;
 }
