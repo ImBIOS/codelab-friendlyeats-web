@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { SearchParams } from "../global.type";
 import type { Schema } from "../lib/firebase/firestore/schema";
+import Pagination from "./pagination";
 
 const RestaurantItem = ({
 	restaurant,
@@ -112,6 +113,7 @@ export default function RestaurantListings({
 					<RestaurantItem key={restaurant.id} restaurant={restaurant} />
 				))}
 			</ul>
+			<Pagination />
 		</article>
 	);
 }
