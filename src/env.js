@@ -13,7 +13,6 @@ export const env = createEnv({
 		GEMINI_API_KEY: z.string(),
 		FIREBASE_CLIENT_EMAIL: z.string(),
 		FIREBASE_PRIVATE_KEY: z.string(),
-		FIREBASE_PROJECT_ID: z.string(),
 	},
 
 	/**
@@ -52,7 +51,6 @@ export const env = createEnv({
 
 		FIREBASE_CLIENT_EMAIL: process.env.FIREBASE_CLIENT_EMAIL,
 		FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY,
-		FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
 	},
 	/**
 	 * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

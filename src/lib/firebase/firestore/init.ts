@@ -9,7 +9,7 @@ if (!admin.apps.length)
 		credential: admin.credential.cert({
 			clientEmail: env.FIREBASE_CLIENT_EMAIL,
 			privateKey: env.FIREBASE_PRIVATE_KEY,
-			projectId: env.FIREBASE_PROJECT_ID,
+			projectId: env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
 		}),
 	});
 
