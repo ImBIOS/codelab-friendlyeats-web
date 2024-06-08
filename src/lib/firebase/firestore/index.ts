@@ -52,6 +52,10 @@ export async function addReviewToRestaurant(
 			...review,
 			timestamp: $.serverDate(),
 		}));
+
+		revalidateTag("getRestaurants");
+		revalidateTag("getReviewsByRestaurantId");
+		revalidateTag("getRestaurantById");
 	} catch (error) {
 		console.error(
 			"There was an error adding the rating to the restaurant",
@@ -87,9 +91,9 @@ export function getRestaurantsSnapshot(
 	return unsubscribe;
 }
 
-export async function getRestaurantById(
+const getRestaurantByIdImpl = async (
 	restaurantId: Schema["restaurants"]["Id"],
-) {
+) => {
 	if (!restaurantId) {
 		console.error("Error: Invalid ID received: ", restaurantId);
 		return;
@@ -97,7 +101,16 @@ export async function getRestaurantById(
 	const result = await newDb.restaurants.get(restaurantId);
 	const data = result?.data;
 	return data;
-}
+};
+
+export const getRestaurantById = unstable_cache(
+	getRestaurantByIdImpl,
+	["getRestaurantById"],
+	{
+		tags: ["getRestaurantById"],
+		revalidate: 86_400,
+	},
+);
 
 export function getRestaurantSnapshotById(
 	restaurantId: Schema["restaurants"]["Id"],
@@ -130,9 +143,9 @@ export const getRestaurants = unstable_cache(
 	},
 );
 
-export async function getReviewsByRestaurantId(
+const getReviewsByRestaurantIdImpl = async (
 	restaurantId: Schema["restaurants"]["Id"],
-) {
+) => {
 	if (!restaurantId) {
 		console.error("Error: Invalid restaurantId received: ", restaurantId);
 		return;
@@ -143,7 +156,16 @@ export async function getReviewsByRestaurantId(
 		.ratings.query(($) => [$.field("timestamp").order("desc"), $.limit(10)]);
 	const data = results.map((rating) => ({ ...rating.data }));
 	return data;
-}
+};
+
+export const getReviewsByRestaurantId = unstable_cache(
+	getReviewsByRestaurantIdImpl,
+	["getReviewsByRestaurantId"],
+	{
+		tags: ["getReviewsByRestaurantId"],
+		revalidate: 86_400,
+	},
+);
 
 export function getReviewsSnapshotByRestaurantId(
 	restaurantId: Schema["restaurants"]["Id"],

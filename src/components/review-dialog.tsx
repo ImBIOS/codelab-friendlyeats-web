@@ -29,14 +29,13 @@ const ReviewDialog = ({
 	const dialog = useRef<HTMLDialogElement>(null);
 
 	// dialogs only render their backdrop when called with `showModal`
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useLayoutEffect(() => {
 		if (isOpen) {
 			dialog.current?.showModal();
 		} else {
 			dialog.current?.close();
 		}
-	}, [isOpen, dialog.current]);
+	}, [isOpen]);
 
 	const handleClick: MouseEventHandler<HTMLDialogElement> = (e) => {
 		// close if clicked outside the modal
