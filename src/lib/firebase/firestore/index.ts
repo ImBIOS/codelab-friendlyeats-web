@@ -104,7 +104,7 @@ const getRestaurantByIdImpl = async (
 };
 
 export const getRestaurantById = unstable_cache(
-	async (id) => getRestaurantByIdImpl(id),
+	getRestaurantByIdImpl,
 	["getRestaurantById"],
 	{
 		tags: ["getRestaurantById"],
@@ -159,7 +159,7 @@ const getReviewsByRestaurantIdImpl = async (
 };
 
 export const getReviewsByRestaurantId = unstable_cache(
-	async (id) => getReviewsByRestaurantIdImpl(id),
+	getReviewsByRestaurantIdImpl,
 	["getReviewsByRestaurantId"],
 	{
 		tags: ["getReviewsByRestaurantId"],
