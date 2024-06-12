@@ -59,3 +59,5 @@ node_modules/
 .firebaserc
 *-firebase-adminsdk-*.json
 tsconfig.tsbuildinfo
+
+public/auth-service-worker.js

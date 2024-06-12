@@ -1,10 +1,11 @@
 {
-	"name": "my-app",
+	"name": "codelab-friendlyeats-web",
 	"version": "0.1.0",
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "next dev",
+		"dev": "next dev -p 3030",
+		"emulator": "firebase emulators:start --project demo-codelab-nextjs",
 		"build": "bun run build-service-worker && next build",
 		"preview": "bun run build-service-worker && next build && next start",
 		"build-service-worker": "bunx esbuild auth-service-worker.js --bundle --outfile=public/auth-service-worker.js",

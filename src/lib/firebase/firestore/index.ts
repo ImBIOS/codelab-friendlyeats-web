@@ -4,16 +4,16 @@ import type { ReviewProps } from "@/src/components/reviews/review";
 import { revalidateTag, unstable_cache } from "next/cache";
 import type { SetStateAction } from "react";
 import { transaction } from "typesaurus";
-import { db as newDb, type Schema } from "./schema";
-import { applyQueryFilters } from "./utils";
+import { db, type Schema } from "./schema";
+import { queryRestaurants, type QueryRestaurantsOptions } from "./utils";
 
 export async function updateRestaurantImageReference(
 	restaurantId: Schema["restaurants"]["Id"],
 	publicImageUrl: string,
 ) {
-	const restaurantRef = newDb.restaurants.ref(restaurantId);
+	const restaurantRef = db.restaurants.ref(restaurantId);
 	if (restaurantRef) {
-		await newDb.restaurants.update(restaurantId, { photo: publicImageUrl });
+		await db.restaurants.update(restaurantId, { photo: publicImageUrl });
 	}
 }
 
@@ -31,7 +31,7 @@ export async function addReviewToRestaurant(
 
 	try {
 		// Update the restaurant's rating
-		transaction(newDb)
+		transaction(db)
 			.read(($) => $.db.restaurants.get(restaurantId))
 			.write(($) => {
 				const restaurant = $.result;
@@ -48,7 +48,7 @@ export async function addReviewToRestaurant(
 			});
 
 		// Add the review to the restaurant
-		await newDb.restaurants(restaurantId).ratings.add(($) => ({
+		await db.restaurants(restaurantId).ratings.add(($) => ({
 			...review,
 			timestamp: $.serverDate(),
 		}));
@@ -71,14 +71,14 @@ export type RestaurantDataWithId = Schema["restaurants"]["Data"] & {
 
 export function getRestaurantsSnapshot(
 	cb: (data: RestaurantDataWithId[]) => void,
-	filters = {},
+	filters: QueryRestaurantsOptions = {},
 ) {
 	if (typeof cb !== "function") {
 		console.log("Error: The callback parameter is not a function");
 		return;
 	}
 
-	const unsubscribe = applyQueryFilters(filters)
+	const unsubscribe = queryRestaurants(filters)
 		.run()
 		.on((restaurants) => {
 			const results = restaurants.map((restaurant) => ({
@@ -98,7 +98,7 @@ const getRestaurantByIdImpl = async (
 		console.error("Error: Invalid ID received: ", restaurantId);
 		return;
 	}
-	const result = await newDb.restaurants.get(restaurantId);
+	const result = await db.restaurants.get(restaurantId);
 	const data = result?.data;
 	return data;
 };
@@ -120,18 +120,20 @@ export function getRestaurantSnapshotById(
 		console.log("Error: Invalid ID received: ", restaurantId);
 		return;
 	}
-	const unsubscribe = newDb.restaurants.get(restaurantId).on((restaurant) => {
+	const unsubscribe = db.restaurants.get(restaurantId).on((restaurant) => {
 		cb(restaurant?.data);
 	});
 	return unsubscribe;
 }
 
-const getRestaurantsImpl = async (filters = {}) => {
-	const results = await applyQueryFilters(filters).run();
-	return results.map((restaurant) => ({
+const getRestaurantsImpl = async (filters: QueryRestaurantsOptions = {}) => {
+	const results = await queryRestaurants(filters).run();
+	const count = await db.restaurants.count();
+	const response = results.map((restaurant) => ({
 		id: restaurant.ref.id,
 		...restaurant.data,
 	}));
+	return response;
 };
 
 export const getRestaurants = unstable_cache(
@@ -151,7 +153,7 @@ const getReviewsByRestaurantIdImpl = async (
 		return;
 	}
 
-	const results = await newDb
+	const results = await db
 		.restaurants(restaurantId)
 		.ratings.query(($) => [$.field("timestamp").order("desc"), $.limit(10)]);
 	const data = results.map((rating) => ({ ...rating.data }));
@@ -176,7 +178,7 @@ export function getReviewsSnapshotByRestaurantId(
 		return;
 	}
 
-	const unsubscribe = newDb
+	const unsubscribe = db
 		.restaurants(restaurantId)
 		.ratings.query(($) => [$.field("timestamp").order("desc"), $.limit(10)])
 		.on((ratings) => {
@@ -197,12 +199,12 @@ export async function addFakeRestaurantsAndReviews() {
 	const data = await generateFakeRestaurantsAndReviews();
 	for (const { restaurantData, ratingsData } of data) {
 		try {
-			const restaurantRef = await newDb.restaurants.add(($) => ({
+			const restaurantRef = await db.restaurants.add(($) => ({
 				...restaurantData,
 				timestamp: $.serverDate(),
 			}));
 			for (const ratingData of ratingsData) {
-				await newDb.restaurants(restaurantRef.id).ratings.add(($) => ({
+				await db.restaurants(restaurantRef.id).ratings.add(($) => ({
 					...ratingData,
 					timestamp: $.serverDate(),
 				}));
