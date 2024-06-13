@@ -1,6 +1,7 @@
 // This component shows restaurant metadata, and offers some actions to the user like uploading a new restaurant image, and adding a review.
 
 import renderStars from "@/src/components/stars";
+import Image from "next/image";
 import type { ChangeEvent } from "react";
 import type { Schema } from "../lib/firebase/firestore/schema";
 
@@ -24,11 +25,11 @@ const RestaurantDetails = ({
 	if (restaurant)
 		return (
 			<section className="img__section">
-				<img src={restaurant.photo} alt={restaurant.name} />
+				<Image src={restaurant.photo} alt={restaurant.name} fill />
 
 				<div className="actions">
 					{userId && (
-						<img
+						<Image
 							alt="Review"
 							className="review"
 							onClick={() => {
@@ -38,6 +39,8 @@ const RestaurantDetails = ({
 								setIsOpen(!isOpen);
 							}}
 							src="/review.svg"
+							width={64}
+							height={64}
 						/>
 					)}
 					<label htmlFor="upload-image" className="add">
@@ -49,7 +52,13 @@ const RestaurantDetails = ({
 							onChange={(event) => handleRestaurantImage(event)}
 						/>
 
-						<img className="add-image" src="/add.svg" alt="Add file" />
+						<Image
+							className="add-image"
+							src="/add.svg"
+							alt="Add file"
+							width={64}
+							height={64}
+						/>
 					</label>
 				</div>
 

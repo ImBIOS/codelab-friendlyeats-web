@@ -7,7 +7,7 @@ import {
 
 import { Timestamp } from "firebase/firestore";
 
-export async function generateFakeRestaurantsAndReviews() {
+export function generateFakeRestaurantsAndReviews() {
 	const restaurantsToAdd = 5;
 	const data = [];
 
@@ -23,12 +23,14 @@ export async function generateFakeRestaurantsAndReviews() {
 			);
 
 			const ratingData = {
-				rating: randomData.restaurantReviews[
-					randomNumberBetween(0, randomData.restaurantReviews.length - 1)
-				]?.rating as number,
-				text: randomData.restaurantReviews[
-					randomNumberBetween(0, randomData.restaurantReviews.length - 1)
-				]?.text as string,
+				rating:
+					randomData.restaurantReviews[
+						randomNumberBetween(0, randomData.restaurantReviews.length - 1)
+					]?.rating ?? 0,
+				text:
+					randomData.restaurantReviews[
+						randomNumberBetween(0, randomData.restaurantReviews.length - 1)
+					]?.text ?? "",
 				userId: `User #${randomNumberBetween()}`,
 				timestamp: ratingTimestamp,
 			};
@@ -45,16 +47,19 @@ export async function generateFakeRestaurantsAndReviews() {
 			: 0;
 
 		const restaurantData = {
-			category: randomData.restaurantCategories[
-				randomNumberBetween(0, randomData.restaurantCategories.length - 1)
-			] as string,
-			name: randomData.restaurantNames[
-				randomNumberBetween(0, randomData.restaurantNames.length - 1)
-			] as string,
+			category:
+				randomData.restaurantCategories[
+					randomNumberBetween(0, randomData.restaurantCategories.length - 1)
+				] ?? "",
+			name:
+				randomData.restaurantNames[
+					randomNumberBetween(0, randomData.restaurantNames.length - 1)
+				] ?? "",
 			avgRating,
-			city: randomData.restaurantCities[
-				randomNumberBetween(0, randomData.restaurantCities.length - 1)
-			] as string,
+			city:
+				randomData.restaurantCities[
+					randomNumberBetween(0, randomData.restaurantCities.length - 1)
+				] ?? "",
 			numRatings: ratingsData.length,
 			sumRating: ratingsData.reduce(
 				(accumulator, currentValue) => accumulator + (currentValue.rating ?? 0),

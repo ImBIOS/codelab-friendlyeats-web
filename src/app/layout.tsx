@@ -1,6 +1,7 @@
 import "@/src/app/styles.css";
-import Header from "@/src/components/header";
 import "@/src/lib/firebase/firestore/init";
+
+import Header from "@/src/components/header";
 import { getAuthenticatedAppForUser } from "@/src/lib/firebase/server-app";
 import NextTopLoader from "nextjs-toploader";
 

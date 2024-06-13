@@ -27,7 +27,7 @@ export default async function Home({ params }: Props) {
 			<Restaurant
 				id={params.id}
 				initialRestaurant={restaurant}
-				initialUserId={currentUser?.uid || ""}
+				initialUserId={currentUser?.uid ?? ""}
 			>
 				<Suspense fallback={<GeminiSummarySkeleton />}>
 					<GeminiSummary restaurantId={params.id} />
@@ -36,7 +36,7 @@ export default async function Home({ params }: Props) {
 			<Suspense
 				fallback={<ReviewsListSkeleton numReviews={restaurant?.numRatings} />}
 			>
-				<ReviewsList restaurantId={params.id} userId={currentUser?.uid || ""} />
+				<ReviewsList restaurantId={params.id} userId={currentUser?.uid ?? ""} />
 			</Suspense>
 		</main>
 	);

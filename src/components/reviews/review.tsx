@@ -6,6 +6,10 @@ export type ReviewProps = {
 };
 
 export function Review({ data }: ReviewProps) {
+	const timestamp =
+		typeof data.timestamp === "string"
+			? new Date(data.timestamp)
+			: data.timestamp;
 	return (
 		<li className="review__item">
 			<ul className="restaurant__rating">{renderStars(data.rating)}</ul>
@@ -15,7 +19,7 @@ export function Review({ data }: ReviewProps) {
 				{data.timestamp &&
 					new Intl.DateTimeFormat("en-GB", {
 						dateStyle: "medium",
-					}).format(data.timestamp)}
+					}).format(timestamp ?? new Date())}
 			</time>
 		</li>
 	);

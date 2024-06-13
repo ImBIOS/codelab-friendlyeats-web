@@ -2,6 +2,7 @@
 import { signInWithGoogle, signOut } from "@/src/lib/firebase/auth";
 import { addFakeRestaurantsAndReviews } from "@/src/lib/firebase/firestore";
 import type { User } from "firebase/auth";
+import Image from "next/image";
 import Link from "next/link";
 import type { MouseEventHandler } from "react";
 import { useUserSession } from "../lib/hooks/use-user-session";
@@ -15,28 +16,35 @@ export default function Header({ initialUser }: Props) {
 
 	const handleSignOut: MouseEventHandler<HTMLButtonElement> = (event) => {
 		event.preventDefault();
-		signOut();
+		void signOut();
 	};
 
 	const handleSignIn: MouseEventHandler<HTMLButtonElement> = (event) => {
 		event.preventDefault();
-		signInWithGoogle();
+		void signInWithGoogle();
 	};
 
 	return (
 		<header>
 			<Link href="/" className="logo">
-				<img src="/friendly-eats.svg" alt="FriendlyEats" />
+				<Image
+					src="/friendly-eats.svg"
+					alt="FriendlyEats"
+					width={35}
+					height={32}
+				/>
 				Friendly Eats
 			</Link>
 			{user ? (
 				<>
 					<div className="profile">
 						<p>
-							<img
+							<Image
 								className="profileImage"
-								src={user.photoURL || "/profile.svg"}
-								alt={user.email || "A placeholder user portrait"}
+								src={user.photoURL ?? "/profile.svg"}
+								alt={user.email ?? "A placeholder user portrait"}
+								width={32}
+								height={32}
 							/>
 							{user.displayName}
 						</p>
@@ -64,7 +72,12 @@ export default function Header({ initialUser }: Props) {
 			) : (
 				<div className="profile">
 					<button type="button" onClick={handleSignIn}>
-						<img src="/profile.svg" alt="A placeholder user portrait" />
+						<Image
+							src="/profile.svg"
+							alt="A placeholder user portrait"
+							width={32}
+							height={32}
+						/>
 						Sign In with Google
 					</button>
 				</div>

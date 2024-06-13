@@ -128,7 +128,6 @@ export function getRestaurantSnapshotById(
 
 const getRestaurantsImpl = async (filters: QueryRestaurantsOptions = {}) => {
 	const results = await queryRestaurants(filters).run();
-	const count = await db.restaurants.count();
 	const response = results.map((restaurant) => ({
 		id: restaurant.ref.id,
 		...restaurant.data,
@@ -196,7 +195,7 @@ export function getReviewsSnapshotByRestaurantId(
 }
 
 export async function addFakeRestaurantsAndReviews() {
-	const data = await generateFakeRestaurantsAndReviews();
+	const data = generateFakeRestaurantsAndReviews();
 	for (const { restaurantData, ratingsData } of data) {
 		try {
 			const restaurantRef = await db.restaurants.add(($) => ({

@@ -10,7 +10,8 @@ import { firebaseConfig } from "./config";
 
 export async function getAuthenticatedAppForUser() {
 	const idToken = headers().get("Authorization")?.split("Bearer ")[1];
-	console.log("firebaseConfig", JSON.stringify(firebaseConfig));
+	// console.log("firebaseConfig", JSON.stringify(firebaseConfig));
+
 	const firebaseServerApp = initializeServerApp(
 		firebaseConfig,
 		idToken ? { authIdToken: idToken } : {},

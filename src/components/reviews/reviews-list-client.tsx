@@ -1,8 +1,8 @@
 "use client";
 
 import { Review, type ReviewProps } from "@/src/components/reviews/review";
-import type { Schema } from "@/src/lib/firebase/firestore/schema";
 import { getReviewsSnapshotByRestaurantId } from "@/src/lib/firebase/firestore";
+import type { Schema } from "@/src/lib/firebase/firestore/schema";
 import { useEffect, useState, type SetStateAction } from "react";
 
 type Props = {
@@ -33,7 +33,7 @@ export default function ReviewsListClient({
 					<ul>
 						{reviews.map((review) => (
 							<Review
-								key={`${review.userId}-${review.text}-${review.rating}-${review.timestamp}`}
+								key={`${review.userId}-${review.text}-${review.rating}`}
 								data={review}
 							/>
 						))}

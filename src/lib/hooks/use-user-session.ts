@@ -20,7 +20,10 @@ export function useUserSession(initialUser: User | null) {
 
 			navigator.serviceWorker
 				.register(serviceWorkerUrl)
-				.then((registration) => console.log("scope is: ", registration.scope));
+				.then((registration) => console.log("scope is: ", registration.scope))
+				.catch((error) =>
+					console.error("Service worker registration failed", error),
+				);
 		}
 	}, []);
 
@@ -41,6 +44,7 @@ export function useUserSession(initialUser: User | null) {
 				router.refresh();
 			}
 		});
+		// eslint-disable-next-line @typescript-eslint/unbound-method
 	}, [user, router.refresh]);
 
 	return user;

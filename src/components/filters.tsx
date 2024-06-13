@@ -1,6 +1,7 @@
 // The filters shown on the restaurant listings page
 
 import Tag from "@/src/components/tag";
+import Image from "next/image";
 import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 type FilterSelectProps = {
@@ -22,7 +23,7 @@ function FilterSelect({
 }: FilterSelectProps) {
 	return (
 		<div>
-			<img src={icon} alt={label} />
+			<Image src={icon} alt={label} width={64} height={64} />
 			<label>
 				{label}
 				<select value={value} onChange={onChange} name={name}>
@@ -73,7 +74,7 @@ export default function Filters({ filters, setFilters }: FiltersProps) {
 		<section className="filter">
 			<details className="filter-menu">
 				<summary>
-					<img src="/filter.svg" alt="filter" />
+					<Image src="/filter.svg" alt="filter" width={64} height={64} />
 					<div>
 						<p>Restaurants</p>
 						<p>Sorted by {filters.sort || "Rating"}</p>

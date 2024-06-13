@@ -7,7 +7,7 @@ The codelab has the full instructions, but as a quick start, you can do this.
 1. In your terminal, run:
 
 ```sh
-firebase emulators:start --project demo-codelab-nextjs
+firebase emulators:start
 ```
 
 2. Copy the file `lib/firebase/config-copy.js` to `lib/firebase/config.js` and fill in the values from the Firebase console.

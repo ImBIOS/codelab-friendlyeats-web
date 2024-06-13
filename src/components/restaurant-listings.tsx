@@ -9,6 +9,7 @@ import {
 	getRestaurantsSnapshot,
 	type RestaurantDataWithId,
 } from "@/src/lib/firebase/firestore";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -37,7 +38,7 @@ const ActiveResturant = ({
 
 const ImageCover = ({ photo, name }: { photo: string; name: string }) => (
 	<div className="image-cover">
-		<img src={photo} alt={name} />
+		<Image src={photo} alt={name} width={300} height={300} />
 	</div>
 );
 
@@ -120,13 +121,7 @@ export default function RestaurantListings({
 
 function routerWithFilters(
 	router: string[] | ReturnType<typeof useRouter>,
-	filters:
-		| {
-				[s: string]: // This components handles the restaurant listings page
-				// It receives data from src/app/page.jsx, such as the initial restaurants and search params from the URL
-				unknown;
-		  }
-		| ArrayLike<unknown>,
+	filters: Record<string, unknown> | ArrayLike<unknown>,
 ) {
 	const queryParams = new URLSearchParams();
 

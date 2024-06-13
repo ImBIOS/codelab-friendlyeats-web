@@ -7,7 +7,7 @@ const config = {
 	},
 	plugins: [
 		"@typescript-eslint",
-		"tailwindcss",
+		// "tailwindcss",
 		"unused-imports",
 		// // NOTE: Cloudflare Workers only support Edge at the moment
 		// 'next-on-pages'
@@ -16,7 +16,7 @@ const config = {
 		"plugin:@typescript-eslint/recommended-type-checked",
 		"plugin:@typescript-eslint/stylistic-type-checked",
 		"prettier",
-		"plugin:tailwindcss/recommended",
+		// "plugin:tailwindcss/recommended",
 		// // NOTE: Cloudflare Workers only support Edge at the moment
 		// 'plugin:next-on-pages/recommended',
 		"next/core-web-vitals",
@@ -85,13 +85,13 @@ const config = {
 				checksVoidReturn: { attributes: false },
 			},
 		],
-		"tailwindcss/no-custom-classname": "off",
+		// "tailwindcss/no-custom-classname": "off",
 	},
 	settings: {
-		tailwindcss: {
-			callees: ["cn", "cva"],
-			config: "tailwind.config.ts",
-		},
+		// tailwindcss: {
+		// 	callees: ["cn", "cva"],
+		// 	config: "tailwind.config.ts",
+		// },
 	},
 };
 

@@ -1,9 +1,10 @@
 /// <reference lib="webworker" />
-import { type FirebaseOptions, initializeApp } from "firebase/app";
-import { type Auth, getAuth, getIdToken } from "firebase/auth";
+import { initializeApp, type FirebaseOptions } from "firebase/app";
+import { getAuth, getIdToken, type Auth } from "firebase/auth";
 import { getInstallations, getToken } from "firebase/installations";
 
-export default null;
+const nullConst = null;
+export default nullConst;
 declare let self: ServiceWorkerGlobalScope;
 
 // this is set during install
@@ -21,7 +22,7 @@ self.addEventListener("install", () => {
 		);
 	}
 
-	firebaseConfig = JSON.parse(serializedFirebaseConfig);
+	firebaseConfig = JSON.parse(serializedFirebaseConfig) as FirebaseOptions;
 	console.log("Service worker installed with Firebase config", firebaseConfig);
 });
 

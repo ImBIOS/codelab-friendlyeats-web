@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "next dev -p 3030",
-		"emulator": "firebase emulators:start --project demo-codelab-nextjs",
+		"emulator": "firebase emulators:start",
 		"build": "bun run build-service-worker && next build",
 		"preview": "bun run build-service-worker && next build && next start",
 		"build-service-worker": "bunx esbuild auth-service-worker.js --bundle --outfile=public/auth-service-worker.js",
@@ -21,7 +21,7 @@
 		"@t3-oss/env-nextjs": "^0.10.1",
 		"firebase": "^10.12.2",
 		"firebase-admin": "^12.1.1",
-		"next": "^14.2.3",
+		"next": "^14.2.4",
 		"nextjs-toploader": "^1.6.12",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
@@ -37,22 +37,22 @@
 		"tls": false
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.8.0",
+		"@biomejs/biome": "^1.8.1",
 		"@ianvs/prettier-plugin-sort-imports": "^4.2.1",
-		"@next/eslint-plugin-next": "^14.2.3",
+		"@next/eslint-plugin-next": "^14.2.4",
 		"@types/eslint": "^8.56.10",
 		"@types/node": "^20.14.2",
 		"@types/react": "^18.3.3",
 		"@types/react-dom": "^18.3.0",
-		"@typescript-eslint/eslint-plugin": "^7.12.0",
-		"@typescript-eslint/parser": "^7.12.0",
-		"esbuild": "^0.21.4",
-		"eslint": "^9.4.0",
+		"@typescript-eslint/eslint-plugin": "^7.13.0",
+		"@typescript-eslint/parser": "^7.13.0",
+		"esbuild": "^0.21.5",
+		"eslint": "^8",
 		"eslint-config-biome": "^1.7.3",
-		"eslint-config-next": "^14.2.3",
+		"eslint-config-next": "^14.2.4",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-unused-imports": "^4.0.0",
-		"prettier": "^3.3.1",
+		"prettier": "^3.3.2",
 		"typescript": "^5.4.5"
 	}
 }

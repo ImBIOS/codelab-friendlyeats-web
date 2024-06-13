@@ -13,7 +13,7 @@ const config: Record<string, string> = {
 // When deployed, there are quotes that need to be stripped
 for (const key in config) {
 	const configValue = `${config[key]}`;
-	if (configValue.charAt(0) === '"') {
+	if (configValue.startsWith('"')) {
 		config[key] = configValue.substring(1, configValue.length - 1);
 	}
 }
